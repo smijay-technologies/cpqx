@@ -1,0 +1,16 @@
+{
+  "[apex]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "cSpell.enableFiletypes": [
+      "apex"
+  ],
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "prettier.configPath": "./.prettierrc",
+  "prettier.documentSelectors": [
+      "**/*.page",
+      "**/*.component"
+  ],
+  "salesforcedx-vscode-core.show-cli-success-msg": false
+}
