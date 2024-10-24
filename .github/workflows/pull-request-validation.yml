@@ -43,7 +43,7 @@ jobs:
 
       - name: Run Source Code Scanner
         run: |
-          sf scanner run -t "**/default/**"" -e eslint -e eslint-lwc -e pmd -e pmd-appexchange -f table -s 2
+          sf scanner run -t "**/default/**" -e eslint -e eslint-lwc -e pmd -e pmd-appexchange -f table -s 2
 
   deploy:
     name: Deployment
