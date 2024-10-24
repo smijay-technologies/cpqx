@@ -59,7 +59,7 @@ jobs:
         run: npm install @salesforce/cli --global
 
       - name: Authenticate to Salesforce using Auth URL
-        run: echo "${{ secrets.SF_AUTH_DETAILS }}" > sfdx_auth_url.json && sf org login sfdx-url --sfdx-url-file sfdx_auth_url.json --set-default --alias cpxdev
+        run: echo "${{ secrets.SF_AUTH_URL }}" > sfdx_auth_url.txt && sf org login sfdx-url --sfdx-url-file sfdx_auth_url.txt --set-default --alias cpxdev
 
       - name: Deploy to Salesforce
         run: |
