@@ -15,12 +15,7 @@ jobs:
 
       - name: Install Prettier and Apex Prettier Plugin
         run: |
-          npm install -g @salesforce/cli
-          npm install -g prettier
-          npm install -g prettier-plugin-apex
-
-      - name: Run Prettier to check code format
-        run: |
+          npm ci
           prettier --plugin=prettier-plugin-apex --check "force-app/main/default/classes/*.cls"
 
   code-analysis:
