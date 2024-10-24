@@ -27,6 +27,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Install SFDX CLI and Source Code Scanner
         run: |
           npm install @salesforce/cli -g
@@ -34,7 +39,7 @@ jobs:
 
       - name: Run Source Code Scanner
         run: |
-          sf scanner run -p force-app/main/default -e sfge,eslint-lwc,pmd-appexchange -f table -s 2
+          sf scanner run -t force-app/main/default -p force-app/main/default -e sfge,eslint-lwc,pmd-appexchange -f table -s 2
 
   deploy:
     name: Deployment
