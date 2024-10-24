@@ -1,0 +1,66 @@
+name: Validate Pull Request
+
+on:
+  pull_request:
+    types: [open]
+    branches: 'main'
+
+jobs:
+  code-formatting:
+    name: "Check Code Formatting"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Salesforce CLI, Prettier and Apex Prettier plugin
+        run: |
+          npm install @salesforce/cli --global
+          npm install -g prettier
+          npm install -g prettier-plugin-apex
+
+      - name: Run Prettier to check code format
+        run: |
+          prettier --check
+
+  code-analysis:
+    name: "Run Code Analysis"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: "11"
+          distribution: "adopt"
+      - name: Run PMD
+        uses: pmd/pmd-github-action@v1
+        with:
+          rulesets: "ruleset.xml"
+          sourcePath: "force-app/main/default"
+          analyzeModifiedFilesOnly: false
+      - name: Upload PMD results
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: pmd-results
+          path: pmd-report.txt
+
+  deploy:
+    needs: [code-formatting, code-analysis]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Salesforce CLI
+        run: npm install @salesforce/cli --global
+
+      - name: Authenticate to Salesforce using Auth URL
+        run: echo "${{ secrets.SF_AUTH_DETAILS }}" > sfdx_auth_url.json && sf org login sfdx-url --sfdx-url-file sfdx_auth_url.json --set-default --alias cpxdev
+
+      - name: Deploy to Salesforce
+        run: |
+          # Deploy source to Salesforce org
+          sf project deploy start --target-org cpxdev --async --concise --test-level NoTestRun
