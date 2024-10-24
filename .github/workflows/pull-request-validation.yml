@@ -42,8 +42,20 @@ jobs:
           sf plugins install @salesforce/sfdx-scanner
 
       - name: Run Source Code Scanner
+        id: run-code-analyzer
         run: |
-          sf scanner run -t "**/default/**" -e eslint -e eslint-lwc -e pmd -e pmd-appexchange -f table -s 1
+          uses: forcedotcom/run-code-analyzer@v1
+        with:
+          run-command: run
+          run-arguments: --normalize-severity --target "**/default/**" -e eslint -e eslint-lwc -e pmd -e pmd-appexchange
+          results-artifact-name: salesforce-code-analyzer-results
+
+      - name: Stop execution if violation
+        if: |
+          steps.run-code-analyzer.outputs.exit-code > 0 ||
+          steps.run-code-analyzer.outputs.num-sev1-violations > 0 ||
+          steps.run-code-analyzer.outputs.num-violations > 0
+        run: exit 1
 
   deploy:
     name: Deployment
