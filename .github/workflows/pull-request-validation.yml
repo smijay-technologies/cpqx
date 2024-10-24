@@ -25,24 +25,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Set up environment
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+        uses: actions/checkout@v4
 
       - name: Install SFDX CLI and Source Code Scanner
         run: |
-          npm install sfdx-cli -g
-          sfdx plugins:install @salesforce/sfdx-scanner
+          npm install @salesforce/cli -g
+          sf plugins install @salesforce/sfdx-scanner
 
       - name: Run Source Code Scanner
-        uses: mitchspano/sfdx-scan-pull-request@v0.1.16
-        with:
-          pmdconfig: ruleset.xml
+        run: |
+          sf scanner run -t force-app/main/default -e sfge,eslint-lwc,pmd-appexchange -f table -s 2
 
   deploy:
     name: Deployment
