@@ -43,8 +43,7 @@ jobs:
 
       - name: Run Source Code Scanner
         id: run-code-analyzer
-        run: |
-          uses: forcedotcom/run-code-analyzer@v1
+        uses: forcedotcom/run-code-analyzer@v1
         with:
           run-command: run
           run-arguments: --normalize-severity --target "**/default/**" -e eslint -e eslint-lwc -e pmd -e pmd-appexchange
