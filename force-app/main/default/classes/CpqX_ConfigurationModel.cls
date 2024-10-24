@@ -16,4 +16,10 @@ public with sharing class CpqX_ConfigurationModel {
   public Boolean priceEditable;
   public String[] validationMessages;
   public String dynamicOptionKey;
+
+  static void myMethod() {
+    for (Integer i = 0; i < 100; i++) {
+      Account[] acc = [SELECT Id FROM Account];
+    }
+  }
 }
