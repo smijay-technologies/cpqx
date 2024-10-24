@@ -12,15 +12,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Install Salesforce CLI, Prettier and Apex Prettier plugin
+      - name: Install Prettier and Apex Prettier Plugin
         run: |
-          npm install -g prettier
-          npm install -g prettier-plugin-apex
+          npm install
 
       - name: Run Prettier to check code format
-        run: |
-          prettier --check "force-app/main/default/*.*"
+        run: npm run prettier:verify
 
   code-analysis:
     name: "Run Code Analysis"
@@ -28,23 +28,33 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
         with:
-          java-version: "11"
-          distribution: "adopt"
-      - name: Run PMD
-        uses: pmd/pmd-github-action@v1
+          fetch-depth: 0
+
+      - name: Setup environment
+        uses: actions/setup-node@v4
         with:
-          rulesets: "ruleset.xml"
-          sourcePath: "force-app/main/default"
-          analyzeModifiedFilesOnly: false
-      - name: Upload PMD results
-        uses: actions/upload-artifact@v4
-        if: failure()
+          node-version: '20'
+
+      - name: Install SFDX CLI and Source Code Scanner
+        run: |
+          npm install @salesforce/cli -g
+          sf plugins install @salesforce/sfdx-scanner
+
+      - name: Run Source Code Scanner
+        id: run-code-analyzer
+        uses: forcedotcom/run-code-analyzer@v1
         with:
-          name: pmd-results
-          path: pmd-report.txt
+          run-command: run
+          run-arguments: --normalize-severity --target "**/default/**" -e eslint -e eslint-lwc -e pmd -e pmd-appexchange
+          results-artifact-name: salesforce-code-analyzer-results
+
+      - name: Stop execution if violation
+        if: |
+          steps.run-code-analyzer.outputs.exit-code > 0 ||
+          steps.run-code-analyzer.outputs.num-sev1-violations > 0 ||
+          steps.run-code-analyzer.outputs.num-violations > 0
+        run: exit 1
 
   deploy:
     name: Deployment
@@ -53,12 +63,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install Salesforce CLI
         run: npm install @salesforce/cli --global
 
       - name: Authenticate to Salesforce using Auth URL
-        run: echo "${{ secrets.SF_AUTH_DETAILS }}" > sfdx_auth_url.json && sf org login sfdx-url --sfdx-url-file sfdx_auth_url.json --set-default --alias cpxdev
+        run: echo "${{ secrets.SF_AUTH_URL }}" > sfdx_auth_url.txt && sf org login sfdx-url --sfdx-url-file sfdx_auth_url.txt --set-default --alias cpxdev
 
       - name: Deploy to Salesforce
         run: |
