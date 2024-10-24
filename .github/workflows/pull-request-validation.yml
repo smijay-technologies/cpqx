@@ -36,6 +36,9 @@ jobs:
           distribution: "microsoft"
 
       - name: Install SFDX CLI and Source Code Scanner
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
         run: |
           npm install sfdx-cli -g
           sfdx plugins:install @salesforce/sfdx-scanner
