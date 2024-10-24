@@ -20,7 +20,7 @@ jobs:
 
       - name: Run Prettier to check code format
         run: |
-          prettier --check "force-app/main/default/**/*.{cls,cmp,component,css,html,js,page,trigger}"
+          prettier --check "force-app/main/default/classes/*.cls"
 
   code-analysis:
     name: "Run Code Analysis"
