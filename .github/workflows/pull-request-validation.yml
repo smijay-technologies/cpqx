@@ -41,7 +41,7 @@ jobs:
           sfdx plugins:install @salesforce/sfdx-scanner
 
       - name: Run Source Code Scanner
-        uses: mitchspano/sfdx-scan-pull-request
+        uses: mitchspano/sfdx-scan-pull-request@v0.1.16
         with:
           pmdconfig: ruleset.xml
 
