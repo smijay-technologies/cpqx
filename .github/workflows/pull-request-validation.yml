@@ -15,7 +15,7 @@ jobs:
 
       - name: Install Salesforce CLI, Prettier and Apex Prettier plugin
         run: |
-          npm install
+          npm install --save-dev prettier prettier-plugin-apex
 
       - name: Run Prettier to check code format
         run: |
@@ -46,6 +46,7 @@ jobs:
           path: pmd-report.txt
 
   deploy:
+    name: Deployment
     needs: [code-formatting, code-analysis]
     runs-on: ubuntu-latest
     steps:
