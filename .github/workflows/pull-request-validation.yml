@@ -15,12 +15,10 @@ jobs:
 
       - name: Install Prettier and Apex Prettier Plugin
         run: |
-          npm install -g @salesforce/cli
-          npm install -g prettier
-          npm install -g prettier-plugin-apex
+          npm install
 
       - name: Run Prettier to check code format
-        run: prettier --plugin=prettier-plugin-apex --check "force-app/main/default/classes/CpqX_ConfigurationModel.cls"
+        run: npm run prettier:verify
 
   code-analysis:
     name: "Run Code Analysis"
