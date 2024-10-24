@@ -30,10 +30,6 @@ jobs:
           fetch-depth: 0
 
       - name: Set up environment
-        uses: actions/setup-java@v4
-        with:
-          java-version: "17"
-          distribution: "microsoft"
         uses: actions/setup-node@v4
         with:
           node-version: 20
