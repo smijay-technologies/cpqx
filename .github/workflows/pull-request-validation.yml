@@ -15,9 +15,7 @@ jobs:
 
       - name: Install Salesforce CLI, Prettier and Apex Prettier plugin
         run: |
-          npm install @salesforce/cli --global
-          npm install -g prettier
-          npm install -g prettier-plugin-apex
+          npm install
 
       - name: Run Prettier to check code format
         run: |
