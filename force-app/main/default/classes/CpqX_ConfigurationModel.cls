@@ -1,3 +1,4 @@
+// CPQ Configuration model
 public with sharing class CpqX_ConfigurationModel {
   public Id configuredProductId;
   public Id optionId;
