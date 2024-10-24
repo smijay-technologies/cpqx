@@ -15,11 +15,11 @@ jobs:
 
       - name: Install Salesforce CLI, Prettier and Apex Prettier plugin
         run: |
-          npm install --save-dev prettier prettier-plugin-apex
+          npm install -g prettier prettier-plugin-apex
 
       - name: Run Prettier to check code format
         run: |
-          prettier --check
+          prettier --plugin=prettier-plugin-apex --check
 
   code-analysis:
     name: "Run Code Analysis"
