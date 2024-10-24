@@ -21,7 +21,7 @@ jobs:
 
       - name: Run Prettier to check code format
         run: |
-          prettier --check "force-app/main/default/classes/*.cls"
+          prettier --plugin=prettier-plugin-apex --check "force-app/main/default/classes/*.cls"
 
   code-analysis:
     name: "Run Code Analysis"
