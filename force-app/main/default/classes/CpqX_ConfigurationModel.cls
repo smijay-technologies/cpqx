@@ -5,7 +5,7 @@
 public with sharing class CpqX_ConfigurationModel {
     public Id configuredProductId; 
     public Id optionId; 
-    public SBQQ__ProductOption__c optionData; // Editable data about the option in question, such as quantity or discount 
+    public SBQQ__ProductOption__c optionData; 
     public SBQQ__ProductOption__c configurationData; 
     public SBQQ__ProductOption__c inheritedConfigurationData; 
     public ConfigurationModel[] optionConfigurations; 
