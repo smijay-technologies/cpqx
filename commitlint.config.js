@@ -76,7 +76,7 @@ module.exports = {
    * Format example: https://github.com/conventional-changelog/commitlint/blob/master/docs/reference-rules.md
    */
   rules: {
-    'jira-task-id-project-key': [2, 'always', ['ADMIN', 'QPP']],
+    'jira-task-id-project-key': [2, 'always', ['ADMIN', 'CPQX']],
     'jira-commit-message-separator': [2, 'always', ': '],
     'jira-task-id-max-length': [0]
   }
