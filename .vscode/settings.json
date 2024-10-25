@@ -12,5 +12,7 @@
       "**/*.page",
       "**/*.component"
   ],
-  "salesforcedx-vscode-core.show-cli-success-msg": false
+  "salesforcedx-vscode-core.show-cli-success-msg": false,
+  "codeAnalyzer.scanner.engines": "eslint,eslint-lwc,pmd,pmd-appexchange",
+  "codeAnalyzer.analyzeOnSave.enabled": true,
 }
