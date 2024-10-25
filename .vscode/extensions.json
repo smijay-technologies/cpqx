@@ -1,6 +1,7 @@
 {
   "recommendations": [
     "salesforce.salesforcedx-vscode",
+    "salesforce.sfdx-code-analyzer-vscode",
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
     "NathanRidley.autotrim",
