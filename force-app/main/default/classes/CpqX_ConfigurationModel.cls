@@ -1,5 +1,9 @@
+/**
+ * @description for CpqX_ConfigurationModel
+ */
+@SuppressWarnings('PMD.TooManyFields')
 public with sharing class CpqX_ConfigurationModel {
-     public Id configuredProductId; 
+    public Id configuredProductId; 
     public Id optionId; 
     public SBQQ__ProductOption__c optionData; // Editable data about the option in question, such as quantity or discount 
     public SBQQ__ProductOption__c configurationData; 
