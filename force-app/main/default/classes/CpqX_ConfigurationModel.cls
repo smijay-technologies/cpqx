@@ -1,4 +1,4 @@
-public with sharing class DemoCustomClass {
+public with sharing class CpqX_ConfigurationModel {
      public Id configuredProductId; 
     public Id optionId; 
     public SBQQ__ProductOption__c optionData; // Editable data about the option in question, such as quantity or discount 
