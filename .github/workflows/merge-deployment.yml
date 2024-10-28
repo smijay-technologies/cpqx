@@ -1,0 +1,25 @@
+name: Merge Deployment
+
+on:
+  merge_group:
+
+jobs:
+  deploy:
+    name: Deployment to QA Environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Salesforce CLI
+        run: npm install @salesforce/cli --global
+
+      - name: Authenticate to Salesforce using Auth URL
+        run: echo "${{ secrets.SF_AUTH_URL_QA }}" > sfdx_auth_url.txt && sf org login sfdx-url --sfdx-url-file sfdx_auth_url.txt --set-default --alias cpxqa
+
+      - name: Deploy to Salesforce
+        run: |
+          # Deploy source to Salesforce org
+          sf project deploy start --target-org cpxqa --concise --test-level NoTestRun
