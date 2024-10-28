@@ -56,8 +56,8 @@ jobs:
           steps.run-code-analyzer.outputs.num-violations > 0
         run: exit 1
 
-  deploy:
-    name: Deployment
+  deploy-dev:
+    name: Deployment to Dev Org
     needs: [code-formatting, code-analysis]
     runs-on: ubuntu-latest
     steps:
