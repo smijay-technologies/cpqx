@@ -1,3 +1,7 @@
+/**
+ * @description for CpqX_ConfigurationModel
+ */
+@SuppressWarnings('PMD.TooManyFields')
 public with sharing class CpqX_ConfigurationModel {
   public SBQQ__QuoteLine__c record;
   public Boolean amountDiscountProrated;
