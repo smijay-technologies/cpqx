@@ -1,5 +1,6 @@
 /**
  * @description CPQ API QuoteModel Class
+ * @author Smijay Technologies
  */
 public class CpqX_QuoteModel {
   public SBQQ__Quote__c record;
