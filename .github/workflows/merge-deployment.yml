@@ -39,4 +39,4 @@ jobs:
       - name: Deploy to Salesforce
         run: |
           # Deploy source to Salesforce org
-          sf project deploy start --target-org cpxqa --concise --test-level NoTestRun
+          sf project deploy start --target-org cpxqa --verbose --test-level RunLocalTests
