@@ -2,7 +2,7 @@
  * @description CPQ API QuoteLineModel class
  */
 @SuppressWarnings('PMD.TooManyFields')
-public with sharing class CpqX_QuoteLineModel {
+public class CpqX_QuoteLineModel {
   public SBQQ__QuoteLine__c record;
   public Boolean amountDiscountProrated;
   public Integer parentGroupKey;
