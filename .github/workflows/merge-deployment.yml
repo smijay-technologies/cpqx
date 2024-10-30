@@ -4,8 +4,24 @@ on:
   merge_group:
 
 jobs:
+  check-files:
+    name: "Check if any relevant files have been modified for deployment"
+    runs-on: ubuntu-latest
+    outputs:
+      needs-build: ${{ steps.check-files.outputs.needs-build }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: 'Check files'
+        id: check-files
+        uses: ./.github/actions/check-build-files
+
   deploy:
     name: Deployment to QA Environment
+    needs: check-files
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
