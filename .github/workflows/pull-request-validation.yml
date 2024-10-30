@@ -24,7 +24,7 @@ jobs:
   code-formatting:
     name: "Check Code Formatting"
     needs: check-files
-    if: needs.check-files.needs-build == 'true'
+    if: needs.check-files.outputs.needs-build == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -42,7 +42,7 @@ jobs:
   code-analysis:
     name: "Run Code Analysis"
     needs: check-files
-    if: needs.check-files.needs-build == 'true'
+    if: needs.check-files.outputs.needs-build == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
