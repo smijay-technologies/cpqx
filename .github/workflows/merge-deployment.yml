@@ -22,6 +22,7 @@ jobs:
   deploy:
     name: Deployment to QA Environment
     needs: check-files
+    if: needs.check-files.outputs.needs-build == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
