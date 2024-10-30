@@ -1,6 +1,6 @@
 /**
  * @description CPQ API OptionModel class
- * @author Smijay Technologies
+ * @author Smijay Technologies Pvt Ltd
  */
 public with sharing class CpqX_OptionModel {
   public SBQQ__ProductOption__c record;
