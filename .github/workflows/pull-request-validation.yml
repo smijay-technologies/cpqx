@@ -6,8 +6,25 @@ on:
     branches: 'main'
 
 jobs:
+  check-files:
+    name: "Check if any relevant files have been modified for deployment"
+    runs-on: ubuntu-latest
+    outputs:
+      needs-build: ${{ steps.check-files.outputs.needs-build }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: 'Check files'
+        id: check-files
+        uses: ./.github/actions/check-build-files
+
   code-formatting:
     name: "Check Code Formatting"
+    needs: check-files
+    if: needs.check-files.needs-build == "true"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -24,6 +41,8 @@ jobs:
 
   code-analysis:
     name: "Run Code Analysis"
+    needs: check-files
+    if: needs.check-files.needs-build == "true"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

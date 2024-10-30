@@ -1,0 +1,16 @@
+name: 'Check for build files'
+description: 'Checks for files that require deployment'
+outputs:
+  needs-build:
+    description: 'Boolean to see if other jobs / steps need to run or not.'
+    value: ${{ steps.dx-change.outputs.changes }}
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Filter changed files'
+      uses: dorny/paths-filter@v3
+      id: dx-change
+      with:
+        filters: |
+          changes:
+            - 'force-app/**'
