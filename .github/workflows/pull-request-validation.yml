@@ -76,6 +76,7 @@ jobs:
         run: exit 1
 
   deploy:
+    name: Deployment Job
     needs: [code-formatting, code-analysis]
     runs-on: ubuntu-latest
     steps:
