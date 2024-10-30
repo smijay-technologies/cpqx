@@ -94,4 +94,4 @@ jobs:
       - name: Deploy to Salesforce
         run: |
           # Deploy source to Salesforce org
-          sf project deploy start --target-org cpxdev --concise --test-level NoTestRun
+          sf project deploy start --target-org cpxdev --verbose --test-level NoTestRun
