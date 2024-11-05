@@ -1,0 +1,40 @@
+.quote-card {
+  background-color: #ffffff; /* Card background color */
+}
+
+.left-right_spacing {
+  padding: 0 15px;
+}
+
+.top-bottom_spacing {
+  padding: 20px 0;
+}
+
+.slds-button_modify {
+  font-weight: 500;
+  border-radius: 10px;
+  border: none;
+  margin-left: 15px;
+}
+
+.slds-button-add {
+  background-color: #ff5757;
+}
+
+.slds-button-filter {
+  background-color: #49268f;
+}
+
+.slds-button-sync {
+  background-color: #0076d3;
+}
+
+.slds-button-size {
+  background-color: #09a85b;
+}
+
+.button-icon {
+  margin-left: 5px; /* Space between text and icon */
+  filter: brightness(0) invert(1); /* Makes the image white */
+  vertical-align: middle; /* Aligns the icon with the text */
+}

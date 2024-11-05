@@ -1,0 +1,52 @@
+<template>
+  <lightning-card class="quote-card">
+    <!-- Quote Heading -->
+    <c-quote-heading quote-name={quoteName}>
+      <!-- Add Product button -->
+      <lightning-button
+        class="slds-button_modify"
+        label="Add Product"
+        icon-name="utility:add"
+        variant="destructive"
+      >
+      </lightning-button>
+
+      <!-- Filter button -->
+      <lightning-button
+        class="slds-button_modify"
+        label="Filter"
+        icon-name="utility:filterList"
+        variant="brand"
+      >
+      </lightning-button>
+
+      <!-- Sync Button -->
+      <lightning-button
+        class="slds-button_modify"
+        label="Sync"
+        icon-name="utility:refresh"
+        variant="neutral"
+      >
+      </lightning-button>
+
+      <!-- Size Button -->
+      <lightning-button
+        class="slds-button_modify"
+        label="Size"
+        icon-name="utility:slider"
+        variant="success"
+      ></lightning-button>
+    </c-quote-heading>
+
+    <div class="left-right_spacing">
+      <!-- Search Box -->
+      <c-search-box onsearch={handleSearch}></c-search-box>
+
+      <!-- Dynamic Datatable -->
+      <c-quote-table
+        table-data={filteredData}
+        columns={columns}
+      ></c-quote-table>
+    </div>
+  </lightning-card>
+</template>
