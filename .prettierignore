@@ -7,5 +7,14 @@
 .sfdx
 .sf
 .vscode
+.husky
+config/
+manifest/
+node_modules/
+script/
+workflows/
 
 coverage/
+
+*.xml
+*.json

@@ -1,9 +1,11 @@
 {
   "trailingComma": "none",
-  "plugins": [
-    "prettier-plugin-apex",
-    "@prettier/plugin-xml"
-  ],
+  "singleQuote": true,
+  "printWidth": 120,
+  "tabWidth": 2,
+  "apexInsertFinalNewline": true,
+  "endOfLine": "lf",
+  "plugins": ["prettier-plugin-apex", "@prettier/plugin-xml"],
   "overrides": [
     {
       "files": "**/lwc/**/*.html",

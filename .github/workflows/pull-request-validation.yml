@@ -1,0 +1,97 @@
+name: Validate Pull Request
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: 'main'
+
+jobs:
+  check-files:
+    name: "Check if any relevant files have been modified for deployment"
+    runs-on: ubuntu-latest
+    outputs:
+      needs-build: ${{ steps.check-files.outputs.needs-build }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: 'Check files'
+        id: check-files
+        uses: ./.github/actions/check-build-files
+
+  code-formatting:
+    name: "Check Code Formatting"
+    needs: check-files
+    if: needs.check-files.outputs.needs-build == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Prettier and Apex Prettier Plugin
+        run: |
+          npm install
+
+      - name: Run Prettier to check code format
+        run: npm run prettier:verify
+
+  code-analysis:
+    name: "Run Code Analysis"
+    needs: check-files
+    if: needs.check-files.outputs.needs-build == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install SFDX CLI and Source Code Scanner
+        run: |
+          npm install @salesforce/cli -g
+          sf plugins install @salesforce/sfdx-scanner
+
+      - name: Run Source Code Scanner
+        id: run-code-analyzer
+        uses: forcedotcom/run-code-analyzer@v1
+        with:
+          run-command: run
+          run-arguments: --normalize-severity --target "**/default/**" -e eslint -e eslint-lwc -e pmd -e pmd-appexchange
+          results-artifact-name: salesforce-code-analyzer-results
+
+      - name: Stop execution if violation
+        if: |
+          steps.run-code-analyzer.outputs.exit-code > 0 ||
+          steps.run-code-analyzer.outputs.num-sev1-violations > 0 ||
+          steps.run-code-analyzer.outputs.num-violations > 0
+        run: exit 1
+
+  deploy:
+    name: Deployment Job
+    needs: [code-formatting, code-analysis]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Salesforce CLI
+        run: npm install @salesforce/cli --global
+
+      - name: Authenticate to Salesforce using Auth URL
+        run: echo "${{ secrets.SF_AUTH_URL }}" > sfdx_auth_url.txt && sf org login sfdx-url --sfdx-url-file sfdx_auth_url.txt --set-default --alias cpxdev
+
+      - name: Deploy to Salesforce
+        run: |
+          # Deploy source to Salesforce org
+          sf project deploy start --target-org cpxdev --verbose --test-level NoTestRun

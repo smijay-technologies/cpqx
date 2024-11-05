@@ -1,0 +1,42 @@
+name: Merge Deployment
+
+on:
+  merge_group:
+
+jobs:
+  check-files:
+    name: "Check if any relevant files have been modified for deployment"
+    runs-on: ubuntu-latest
+    outputs:
+      needs-build: ${{ steps.check-files.outputs.needs-build }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: 'Check files'
+        id: check-files
+        uses: ./.github/actions/check-build-files
+
+  deploy:
+    name: Deployment Job
+    needs: check-files
+    if: needs.check-files.outputs.needs-build == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Salesforce CLI
+        run: npm install @salesforce/cli --global
+
+      - name: Authenticate to Salesforce using Auth URL
+        run: echo "${{ secrets.SF_AUTH_URL_QA }}" > sfdx_auth_url.txt && sf org login sfdx-url --sfdx-url-file sfdx_auth_url.txt --set-default --alias cpxqa
+
+      - name: Deploy to Salesforce
+        run: |
+          # Deploy source to Salesforce org
+          sf project deploy start --target-org cpxqa --verbose --test-level RunLocalTests
