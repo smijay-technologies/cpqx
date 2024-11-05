@@ -1,26 +1,28 @@
 import { LightningElement, api, track } from 'lwc';
-import getQuoteLines from '@salesforce/apex/QuoteController.getQuoteLines';
-import getFieldSetFields from '@salesforce/apex/QuoteController.getFieldSetFields';
-
-// Import icons for buttons
 import filterIcon from '@salesforce/resourceUrl/filterIcon';
-import syncIcon from '@salesforce/resourceUrl/syncIcon';
+import getFieldSetFields from '@salesforce/apex/QuoteController.getFieldSetFields';
+import getQuoteLines from '@salesforce/apex/QuoteController.getQuoteLines';
 import sizeIcon from '@salesforce/resourceUrl/sizeIcon';
+import syncIcon from '@salesforce/resourceUrl/syncIcon';
 
-export default class parentQuote extends LightningElement {
-  @api recordId; // The Quote recordId passed from the parent record page
+export default class ParentQuote extends LightningElement {
+  // The Quote recordId passed from the parent record page
+  @api recordId;
   @track quoteName;
 
+  defaultType = 'text';
   // Icons stored as class variables
   filterIcon = filterIcon;
   syncIcon = syncIcon;
   sizeIcon = sizeIcon;
 
   @track tableData = [];
-  @track filteredData = []; // Filtered data for the datatable
+  // Filtered data for the datatable
+  @track filteredData = [];
   @track columns = [];
 
-  searchKey = ''; // Search term for filtering
+  // Search term for filtering
+  searchKey = '';
 
   // Fetch dynamic fields and data when the component is initialized
   connectedCallback() {
@@ -33,9 +35,9 @@ export default class parentQuote extends LightningElement {
     getFieldSetFields({ fieldSetName: 'SBQQ__LineEditor' })
       .then((fieldMap) => {
         this.columns = Object.keys(fieldMap).map((label) => ({
-          label: label,
           fieldName: fieldMap[label],
-          type: this.getColumnType(fieldMap[label]) // Determine the column type
+          label,
+          type: this.getColumnType(fieldMap[label])
         }));
       })
       .catch((error) => {
@@ -45,20 +47,19 @@ export default class parentQuote extends LightningElement {
 
   // Fetch Quote Line data based on recordId
   loadQuoteLines() {
+    const FIRST_ELEMENT_INDEX = 0;
     getQuoteLines({
-      quoteId: this.recordId,
-      fieldSetName: 'SBQQ__LineEditor'
+      fieldSetName: 'SBQQ__LineEditor',
+      quoteId: this.recordId
     })
       .then((quote) => {
-        if (quote[0].SBQQ__Quote__r) {
-          this.quoteName = quote[0].SBQQ__Quote__r.Name;
+        if (quote[FIRST_ELEMENT_INDEX].SBQQ__Quote__r) {
+          this.quoteName = quote[FIRST_ELEMENT_INDEX].SBQQ__Quote__r.Name;
           this.tableData = quote;
           this.filteredData = quote;
         } else {
-          this.quoteName = quote[0].Name;
+          this.quoteName = quote[FIRST_ELEMENT_INDEX].Name;
         }
-
-        console.log('quote: ', quote);
       })
       .catch((error) => {
         this.error = error;
@@ -73,9 +74,8 @@ export default class parentQuote extends LightningElement {
       return 'date';
     } else if (field.toLowerCase().includes('quantity')) {
       return 'number';
-    } 
-      return 'text';
-    
+    }
+    return this.defaultType;
   }
 
   // Handle search event from child component
@@ -91,7 +91,8 @@ export default class parentQuote extends LightningElement {
         row.SBQQ__ProductName__c.toLowerCase().includes(this.searchKey)
       );
     } else {
-      this.filteredData = [...this.tableData]; // Reset to full data if searchKey is empty
+      // Reset to full data if searchKey is empty
+      this.filteredData = [...this.tableData];
     }
   }
 }

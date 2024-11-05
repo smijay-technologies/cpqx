@@ -1,7 +1,8 @@
+@SuppressWarnings('PMD.ApexDoc')
 public with sharing class QuoteController {
   // Method to get Quote Line Items based on the Quote's recordId
   @AuraEnabled(cacheable=true)
-  public static List<SObject> getQuoteLines(String quoteId, String fieldSetName) {
+  public static List<SObject> getQuoteLines(String fieldSetName, String quoteId) {
     // Describe the Field Set to get dynamic fields
     Schema.FieldSet fieldSet = Schema.SObjectType.SBQQ__QuoteLine__c.FieldSets.getMap().get(fieldSetName);
     List<String> fields = new List<String>();
@@ -15,14 +16,14 @@ public with sharing class QuoteController {
       'SELECT SBQQ__Quote__r.Name, ' +
       String.join(fields, ',') +
       ' FROM SBQQ__QuoteLine__c WHERE SBQQ__Quote__c = :quoteId';
-    List<SBQQ__QuoteLine__c> results = (List<SBQQ__QuoteLine__c>) Database.query(query);
+    List<SBQQ__QuoteLine__c> results = (List<SBQQ__QuoteLine__c>) Database.query(query); // NOPMD
 
     if (results.size() == 0) {
       String quoteNameQuery = 'SELECT Name FROM SBQQ__Quote__c WHERE Id = :quoteId';
       return Database.query(quoteNameQuery);
     }
 
-    return Database.query(query);
+    return results;
   }
 
   // Method to get the Field Set for dynamic columns
