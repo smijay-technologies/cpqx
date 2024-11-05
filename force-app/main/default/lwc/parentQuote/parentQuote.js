@@ -1,11 +1,11 @@
-import { LightningElement, api, track, wire } from "lwc";
-import getQuoteLines from "@salesforce/apex/QuoteController.getQuoteLines";
-import getFieldSetFields from "@salesforce/apex/QuoteController.getFieldSetFields";
+import { LightningElement, api, track } from 'lwc';
+import getQuoteLines from '@salesforce/apex/QuoteController.getQuoteLines';
+import getFieldSetFields from '@salesforce/apex/QuoteController.getFieldSetFields';
 
 // Import icons for buttons
-import filterIcon from "@salesforce/resourceUrl/filterIcon";
-import syncIcon from "@salesforce/resourceUrl/syncIcon";
-import sizeIcon from "@salesforce/resourceUrl/sizeIcon";
+import filterIcon from '@salesforce/resourceUrl/filterIcon';
+import syncIcon from '@salesforce/resourceUrl/syncIcon';
+import sizeIcon from '@salesforce/resourceUrl/sizeIcon';
 
 export default class parentQuote extends LightningElement {
   @api recordId; // The Quote recordId passed from the parent record page
@@ -20,7 +20,7 @@ export default class parentQuote extends LightningElement {
   @track filteredData = []; // Filtered data for the datatable
   @track columns = [];
 
-  searchKey = ""; // Search term for filtering
+  searchKey = ''; // Search term for filtering
 
   // Fetch dynamic fields and data when the component is initialized
   connectedCallback() {
@@ -30,7 +30,7 @@ export default class parentQuote extends LightningElement {
 
   // Fetch Field Set fields for dynamic columns
   loadFieldSetFields() {
-    getFieldSetFields({ fieldSetName: "SBQQ__LineEditor" })
+    getFieldSetFields({ fieldSetName: 'SBQQ__LineEditor' })
       .then((fieldMap) => {
         this.columns = Object.keys(fieldMap).map((label) => ({
           label: label,
@@ -47,7 +47,7 @@ export default class parentQuote extends LightningElement {
   loadQuoteLines() {
     getQuoteLines({
       quoteId: this.recordId,
-      fieldSetName: "SBQQ__LineEditor"
+      fieldSetName: 'SBQQ__LineEditor'
     })
       .then((quote) => {
         if (quote[0].SBQQ__Quote__r) {
@@ -58,7 +58,7 @@ export default class parentQuote extends LightningElement {
           this.quoteName = quote[0].Name;
         }
 
-        console.log("quote: ", quote);
+        console.log('quote: ', quote);
       })
       .catch((error) => {
         this.error = error;
@@ -67,18 +67,15 @@ export default class parentQuote extends LightningElement {
 
   // Utility method to determine column type
   getColumnType(field) {
-    if (
-      field.toLowerCase().includes("price") ||
-      field.toLowerCase().includes("amount")
-    ) {
-      return "currency";
-    } else if (field.toLowerCase().includes("date")) {
-      return "date";
-    } else if (field.toLowerCase().includes("quantity")) {
-      return "number";
-    } else {
-      return "text";
-    }
+    if (field.toLowerCase().includes('price') || field.toLowerCase().includes('amount')) {
+      return 'currency';
+    } else if (field.toLowerCase().includes('date')) {
+      return 'date';
+    } else if (field.toLowerCase().includes('quantity')) {
+      return 'number';
+    } 
+      return 'text';
+    
   }
 
   // Handle search event from child component
