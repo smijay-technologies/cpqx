@@ -1,15 +1,10 @@
 {
   "recommendations": [
     "salesforce.salesforcedx-vscode",
-    "redhat.vscode-xml",
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "financialforce.lana",
     "salesforce.sfdx-code-analyzer-vscode",
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
     "NathanRidley.autotrim",
     "streetsidesoftware.code-spell-checker"
-
   ]
 }

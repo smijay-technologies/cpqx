@@ -5,8 +5,8 @@
       "default": true
     }
   ],
-  "name": "Cpqx-dev",
+  "name": "cicd-project",
   "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "62.0"
+  "sourceApiVersion": "61.0"
 }
