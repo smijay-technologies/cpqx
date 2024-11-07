@@ -17,13 +17,14 @@ export default class ParentQuote extends LightningElement {
   sizeIcon = sizeIcon;
 
   @track tableData = [];
-  // Filtered data for the datatable
+  // Filtered data for the search
   @track filteredData = [];
   @track columns = [];
+  @track draftValues = [];
 
   // Search term for filtering
   searchKey = '';
-
+  error = '';
   // Fetch dynamic fields and data when the component is initialized
   connectedCallback() {
     this.loadFieldSetFields();
@@ -34,14 +35,19 @@ export default class ParentQuote extends LightningElement {
   loadFieldSetFields() {
     getFieldSetFields({ fieldSetName: 'SBQQ__LineEditor' })
       .then((fieldMap) => {
-        this.columns = Object.keys(fieldMap).map((label) => ({
-          fieldName: fieldMap[label],
-          label,
-          type: this.getColumnType(fieldMap[label])
-        }));
+        this.columns = Object.keys(fieldMap).map((label) => {
+          const fieldInfo = fieldMap[label];
+          return {
+            editable: true,
+            fieldName: fieldInfo.apiName,
+            label,
+            type: ParentQuote.getColumnType(fieldInfo.type)
+          };
+        });
       })
       .catch((error) => {
         this.error = error;
+        //Console.error(error);
       });
   }
 
@@ -63,35 +69,43 @@ export default class ParentQuote extends LightningElement {
       })
       .catch((error) => {
         this.error = error;
+        //Console.error(error);
       });
   }
 
   // Utility method to determine column type
-  getColumnType(field) {
-    if (field.toLowerCase().includes('price') || field.toLowerCase().includes('amount')) {
-      return 'currency';
-    } else if (field.toLowerCase().includes('date')) {
-      return 'date';
-    } else if (field.toLowerCase().includes('quantity')) {
-      return 'number';
+  static getColumnType(fieldType) {
+    switch (fieldType.toLowerCase()) {
+      case 'currency':
+        return 'currency';
+      case 'date':
+        return 'date';
+      case 'double':
+      case 'integer':
+        return 'number';
+      default:
+        return 'text';
     }
-    return this.defaultType;
   }
-
   // Handle search event from child component
   handleSearch(event) {
-    this.searchKey = event.detail.searchKey.toLowerCase();
+    this.searchKey = event.detail.search.toLowerCase();
     this.filterQuoteLines();
   }
 
   // Filter quote lines based on the search key
   filterQuoteLines() {
     if (this.searchKey) {
-      this.filteredData = this.tableData.filter((row) =>
-        row.SBQQ__ProductName__c.toLowerCase().includes(this.searchKey)
-      );
+      this.filteredData = this.tableData.filter((row) => {
+        return Object.keys(row).some((field) => {
+          let fieldValue = '';
+          if (row[field]) {
+            fieldValue = String(row[field]).toLowerCase();
+          }
+          return fieldValue.includes(this.searchKey);
+        });
+      });
     } else {
-      // Reset to full data if searchKey is empty
       this.filteredData = [...this.tableData];
     }
   }
