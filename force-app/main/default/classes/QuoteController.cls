@@ -27,39 +27,37 @@ public with sharing class QuoteController {
   }
 
   // Method to get the Field Set for dynamic columns
-//   @AuraEnabled(cacheable=true)
-//   public static Map<String, String> getFieldSetFields(String fieldSetName) {
-//     Map<String, String> fieldMap = new Map<String, String>();
-//     Schema.FieldSet fieldSet = Schema.SObjectType.SBQQ__QuoteLine__c.FieldSets.getMap().get(fieldSetName);
+  //   @AuraEnabled(cacheable=true)
+  //   public static Map<String, String> getFieldSetFields(String fieldSetName) {
+  //     Map<String, String> fieldMap = new Map<String, String>();
+  //     Schema.FieldSet fieldSet = Schema.SObjectType.SBQQ__QuoteLine__c.FieldSets.getMap().get(fieldSetName);
 
-//     for (Schema.FieldSetMember field : fieldSet.getFields()) {
-//       // Add the label and the field path to the map
-//       fieldMap.put(field.getLabel(), field.getFieldPath());
-//     }
+  //     for (Schema.FieldSetMember field : fieldSet.getFields()) {
+  //       // Add the label and the field path to the map
+  //       fieldMap.put(field.getLabel(), field.getFieldPath());
+  //     }
 
-//     return fieldMap;
-//   }
-@AuraEnabled(cacheable=true)
-public static Map<String, Map<String, String>> getFieldSetFields(String fieldSetName) {
+  //     return fieldMap;
+  //   }
+  @AuraEnabled(cacheable=true)
+  public static Map<String, Map<String, String>> getFieldSetFields(String fieldSetName) {
     Map<String, Map<String, String>> fieldMap = new Map<String, Map<String, String>>();
 
     // Get the field set from the SBQQ__QuoteLine__c object
     Schema.FieldSet fieldSet = Schema.SObjectType.SBQQ__QuoteLine__c.FieldSets.getMap().get(fieldSetName);
 
     if (fieldSet != null) {
-        for (Schema.FieldSetMember f : fieldSet.getFields()) {
-            // Get the field API name and its metadata
-            Map<String, String> fieldAttributes = new Map<String, String>();
-            Schema.SObjectField field = Schema.SObjectType.SBQQ__QuoteLine__c.fields.getMap().get(f.getFieldPath());
+      for (Schema.FieldSetMember f : fieldSet.getFields()) {
+        // Get the field API name and its metadata
+        Map<String, String> fieldAttributes = new Map<String, String>();
+        Schema.SObjectField field = Schema.SObjectType.SBQQ__QuoteLine__c.fields.getMap().get(f.getFieldPath());
 
-            fieldAttributes.put('apiName', f.getFieldPath());
-            fieldAttributes.put('type', String.valueOf(field.getDescribe().getType())); // Get the field type
+        fieldAttributes.put('apiName', f.getFieldPath());
+        fieldAttributes.put('type', String.valueOf(field.getDescribe().getType())); // Get the field type
 
-            fieldMap.put(f.getLabel(), fieldAttributes);
-        }
+        fieldMap.put(f.getLabel(), fieldAttributes);
+      }
     }
     return fieldMap;
-}
-
-
+  }
 }
