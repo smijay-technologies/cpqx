@@ -96,15 +96,15 @@ export default class ParentQuote extends LightningElement {
   // Filter quote lines based on the search key
   filterQuoteLines() {
     if (this.searchKey) {
-      this.filteredData = this.tableData.filter((row) => {
-        return Object.keys(row).some((field) => {
+      this.filteredData = this.tableData.filter((row) =>
+        Object.keys(row).some((field) => {
           let fieldValue = '';
           if (row[field]) {
             fieldValue = String(row[field]).toLowerCase();
           }
           return fieldValue.includes(this.searchKey);
-        });
-      });
+        })
+      );
     } else {
       this.filteredData = [...this.tableData];
     }
